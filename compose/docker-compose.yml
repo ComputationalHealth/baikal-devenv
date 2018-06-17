@@ -1,0 +1,165 @@
+---
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:4.1.1
+    container_name: zookeeper
+    ports:
+      - "32181:32181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      vpcbr:
+        ipv4_address: 10.6.0.156
+
+  kafka:
+    image: confluentinc/cp-kafka:4.1.1
+    container_name: kafka
+    ports:
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 10.6.0.156:32181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.6.0.155:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      vpcbr:
+        ipv4_address: 10.6.0.155
+
+  nimbus:
+    image: storm
+    container_name: nimbus
+    command: storm nimbus
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper
+    restart: always
+    ports:
+      - 6627:6627
+
+  supervisor:
+    image: storm
+    container_name: supervisor
+    command: storm supervisor
+    depends_on:
+      - nimbus
+      - zookeeper
+    links:
+      - nimbus
+      - zookeeper
+    restart: always
+
+  supervisor-ui:
+    image: storm
+    container_name: stormui
+    command: storm ui
+    depends_on:
+      - nimbus
+      - zookeeper
+      - supervisor
+    links:
+      - nimbus
+      - zookeeper
+      - supervisor
+    restart: always
+    ports:
+      - 9090:8080
+
+  database:
+    image: postgres
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "consumer"
+      POSTGRES_PASSWORD: "testing"
+      POSTGRES_DB: "admin"
+    networks:
+      vpcbr:
+        ipv4_address: 10.6.0.153
+
+  nifi:
+    image: mkobit/nifi
+    container_name: nifi
+    ports:
+      - "8080-8081:8080-8081"
+    volumes:
+      - "/mnt/data/baikal-devenv/nifi/data:/mnt/data"
+      - "/mnt/data/baikal-devenv/nifi/hdfs:/opt/nifi/conf/hdfs"
+    networks:
+      vpcbr:
+        ipv4_address: 10.6.0.151
+
+  notebook:
+    build: ../jupyter
+    container_name: notebook
+    volumes:
+      - "/mnt/data/baikal-devenv/jupyter/src:/home/jovyan/work"
+    ports:
+      - "8888:8888"
+    networks:
+      vpcbr:
+        ipv4_address: 10.6.0.150
+
+  hadoop-namenode:
+    image: segence/hadoop:0.7.0
+    container_name: hadoop-namenode
+    hostname: hadoop-namenode
+    ports: # HOST:CONTAINER
+      - "2222:2222"
+      - "4040:4040"
+      - "8020:8020"
+      - "8088:8088"
+      - "9001:9001"
+      - "50070:50070"
+      - "50090:50090"
+    expose:
+      - "8030-8050"
+    environment:
+      - HDFS_REPLICATION_FACTOR=1
+      - HADOOP_NAMENODE_HOST=hadoop-namenode
+    volumes:
+      - ../hadoop/startup.sh:/root/startup.sh
+      - ../hadoop/data-master:/data
+      - ../hadoop/slaves-config:/config:ro
+      - ../hadoop/deployments:/deployments:ro
+    tty: true
+    networks:
+      vpcbr:
+        ipv4_address: 10.6.0.157
+
+  hadoop-datanode1:
+    image: segence/hadoop:0.7.0
+    container_name: hadoop-datanode1
+    hostname: hadoop-datanode1
+    ports:
+      - "8042:8042"
+      - "50075:50075"
+    expose:
+      - "34000-48000"
+      - "50010"
+      - "50020"
+      - "50040"
+    environment:
+      - HDFS_REPLICATION_FACTOR=1
+      - HADOOP_NAMENODE_HOST=hadoop-namenode
+    volumes:
+      - ../hadoop/data-slave1:/data
+      - ../hadoop/slaves-config:/config:ro
+    links:
+      - hadoop-namenode
+    tty: true
+    networks:
+      vpcbr:
+        ipv4_address: 10.6.0.158
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.6.0.0/24
