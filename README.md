@@ -14,7 +14,10 @@ Startup:
 - ./startup.sh (long process (~5 min))
 
 Shutdown - Important!:
-- docker-compose down -v && ./clean-hdfs-directories.sh
+If mounting HDFS volumes for stroage:
+ - docker-compose down -v && ./clean-hdfs-directories.sh
+otherwise:
+ - docker-compose down -v
 
 Notes
 -----

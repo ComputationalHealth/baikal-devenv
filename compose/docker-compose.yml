@@ -2,13 +2,10 @@
 version: '3'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:4.1.1
+    image: zookeeper:3.3.6
     container_name: zookeeper
     ports:
-      - "32181:32181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 32181
-      ZOOKEEPER_TICK_TIME: 2000
+      - "2181:2181"
     networks:
       vpcbr:
         ipv4_address: 10.6.0.156
@@ -22,7 +19,7 @@ services:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 10.6.0.156:32181
+      KAFKA_ZOOKEEPER_CONNECT: 10.6.0.156:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.6.0.155:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
@@ -36,22 +33,28 @@ services:
     depends_on:
       - zookeeper
     links:
-      - zookeeper
+      - zookeeper:zookeeper
     restart: always
     ports:
       - 6627:6627
+    networks:
+      - vpcbr
 
   supervisor:
     image: storm
     container_name: supervisor
     command: storm supervisor
+    ports:
+      - 8000:8000
     depends_on:
       - nimbus
       - zookeeper
     links:
-      - nimbus
-      - zookeeper
+      - nimbus:nimbus
+      - zookeeper:zookeeper
     restart: always
+    networks:
+      - vpcbr
 
   supervisor-ui:
     image: storm
@@ -62,12 +65,14 @@ services:
       - zookeeper
       - supervisor
     links:
-      - nimbus
-      - zookeeper
-      - supervisor
+      - nimbus:nimbus
+      - zookeeper:zookeeper
+      - supervisor:supervisor
     restart: always
     ports:
       - 9090:8080
+    networks:
+      - vpcbr
 
   database:
     image: postgres
@@ -124,7 +129,7 @@ services:
       - HADOOP_NAMENODE_HOST=hadoop-namenode
     volumes:
       - ../hadoop/startup.sh:/root/startup.sh
-      - ../hadoop/data-master:/data
+#      - ../hadoop/data-master:/data
       - ../hadoop/slaves-config:/config:ro
       - ../hadoop/deployments:/deployments:ro
     tty: true
@@ -148,7 +153,7 @@ services:
       - HDFS_REPLICATION_FACTOR=1
       - HADOOP_NAMENODE_HOST=hadoop-namenode
     volumes:
-      - ../hadoop/data-slave1:/data
+#      - ../hadoop/data-slave1:/data
       - ../hadoop/slaves-config:/config:ro
     links:
       - hadoop-namenode
