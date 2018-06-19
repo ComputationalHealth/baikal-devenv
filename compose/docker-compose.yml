@@ -43,7 +43,7 @@ services:
   supervisor:
     image: storm
     container_name: supervisor
-    command: storm supervisor
+    command: storm supervisor -c supervisor.childopts="-Xmx256m"
     ports:
       - 8000:8000
     depends_on:
