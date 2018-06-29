@@ -29,7 +29,7 @@ services:
   nimbus:
     image: storm
     container_name: nimbus
-    command: storm nimbus
+    command: storm nimbus -c supervisor.childopts="-Xmx1024m"
     depends_on:
       - zookeeper
     links:
@@ -43,7 +43,7 @@ services:
   supervisor:
     image: storm
     container_name: supervisor
-    command: storm supervisor -c supervisor.childopts="-Xmx256m"
+    command: storm supervisor -c supervisor.childopts="-Xmx1024m"
     ports:
       - 8000:8000
     depends_on:
