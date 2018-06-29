@@ -2,7 +2,7 @@
 version: '3'
 services:
   zookeeper:
-    image: zookeeper:3.3.6
+    image: zookeeper:3.4.6
     container_name: zookeeper
     ports:
       - "2181:2181"
@@ -11,23 +11,26 @@ services:
         ipv4_address: 10.6.0.156
 
   kafka:
-    image: confluentinc/cp-kafka:4.1.1
+    image: ches/kafka:0.10.1.0
     container_name: kafka
     ports:
-      - "29092:29092"
+      - "9092:9092"
     depends_on:
       - zookeeper
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 10.6.0.156:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.6.0.155:29092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_BROKER_ID: 0
+      ZOOKEEPER_CONNECTION_STRING: 10.6.0.156:2181
+      KAFKA_ADVERTISED_HOST_NAME: 10.6.0.155
+      KAFKA_PORT: 9092
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
     networks:
       vpcbr:
         ipv4_address: 10.6.0.155
 
   nimbus:
-    image: storm
+    image: storm:1.1
     container_name: nimbus
     command: storm nimbus -c supervisor.childopts="-Xmx1024m"
     depends_on:
@@ -41,7 +44,7 @@ services:
       - vpcbr
 
   supervisor:
-    image: storm
+    image: storm:1.1
     container_name: supervisor
     command: storm supervisor -c supervisor.childopts="-Xmx1024m"
     ports:
@@ -57,7 +60,7 @@ services:
       - vpcbr
 
   supervisor-ui:
-    image: storm
+    image: storm:1.1
     container_name: stormui
     command: storm ui
     depends_on:
