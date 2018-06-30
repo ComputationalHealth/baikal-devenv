@@ -13,10 +13,7 @@ Startup:
 - (winpty) docker exec -it hadoop-namenode bash
 - ./startup.sh (long process (~5 min))
 
-Shutdown - Important!:
-If mounting HDFS volumes for stroage:
- - docker-compose down -v && ./clean-hdfs-directories.sh
-otherwise:
+Shutdown:
  - docker-compose down -v
 
 Notes
