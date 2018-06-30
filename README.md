@@ -1,33 +1,38 @@
 baikal-devenv
 =============
-Provides 2-node HDFS, Zeppelin w/ spark 2.2, Nifi, Kafka, Jupyter notebook, postgres db, and python scripts to consume/produce Kafka.
+Provides 2-node HDFS, Zeppelin w/ spark 2.2, Nifi, Kafka, Jupyter notebook, postgres db, and python scripts to consume/produce Kafka. Applications and services largely version-locked to resemble HDP v2.6.0.3 for development and testin.
 
 Instructions
 ------------
 
-Startup:
-- cd C:/
-- git clone https://github.com/ComputationalHealth/baikal-devenv.git
-- cd baikal-devenv/compose
-- docker-compose up -d --build
-- (winpty) docker exec -it hadoop-namenode bash
-- ./startup.sh (long process (~5 min))
+### Startup:
 
-Shutdown:
- - docker-compose down -v
+1. cd C:/
+2. git clone https://github.com/ComputationalHealth/baikal-devenv.git
+3. cd baikal-devenv/compose
+4. docker-compose up -d --build
+5. (winpty) docker exec -it hadoop-namenode bash
+6. ./startup.sh (long process (~5 min))
+
+### Shutdown:
+1. docker-compose down -v
 
 Notes
 -----
 
-- Volume paths in docker-compose assume baikal-dev is in C:/ 
-- Nifi at localhost:8080/nifi
-- Mounted nifi data directory is baikal-dev/nifi/data
-- For connecting to hdfs in nifi use /opt/nifi/conf/hdfs/conf-site.xml
-- startup.sh gives Nifi write access to /user/nifi path in hdfs
-- Zeppelin is at localhost:9001
+- All nodes are at either localhost or the virtual host IP address depending on system config
+- NiFi at port 8080
+  - Mounted nifi data directory is baikal-dev/nifi/data
+  - For connecting to hdfs in nifi use /opt/nifi/conf/hdfs/conf-site.xml
+- startup.sh installs some packages for PySpark and gives Storm write access to /data and Nifi write access to /user/nifi paths in hdfs
+- Zeppelin is at port 9001
+- StormUI is at port 9090
+- Jupyter is at port 8888
+- Kafka advertise port is 9092
 
 To connect to Kafka using confluent_kafka python API:
 
-    from confluent_kafka import Producer
-
-    p = Producer({'bootstrap.servers': '10.6.0.155:29092'})
+```python
+from confluent_kafka import Producer
+p = Producer({'bootstrap.servers': '10.6.0.155:9092'})
+```

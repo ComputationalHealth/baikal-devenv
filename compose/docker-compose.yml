@@ -1,3 +1,6 @@
+# docker-compose for Hadoop services versioned to be largely equivalent to HDP v2.6.0.3 
+# for testing and development purposes
+
 ---
 version: '3'
 services:
