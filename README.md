@@ -7,12 +7,10 @@ Instructions
 
 ### Startup:
 
-1. cd C:/
-2. git clone https://github.com/ComputationalHealth/baikal-devenv.git
-3. cd baikal-devenv/compose
-4. docker-compose up -d --build
-5. (winpty) docker exec -it hadoop-namenode bash
-6. ./startup.sh (long process (~5 min))
+1. git clone https://github.com/ComputationalHealth/baikal-devenv.git
+2. cd baikal-devenv/compose
+3. docker-compose up -d --build
+4. docker exec hadoop-namenode /bin/bash startup.sh
 
 ### Shutdown:
 1. docker-compose down -v
