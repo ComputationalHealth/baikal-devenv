@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://HADOOP_NAMENODE_HOST/</value>
+    </property>
+</configuration>

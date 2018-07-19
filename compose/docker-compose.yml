@@ -1,4 +1,4 @@
-# docker-compose for Hadoop services versioned to be largely equivalent to HDP v2.6.0.3 
+# docker-compose for Hadoop services versioned to be largely equivalent to HDP v2.6.0.3
 # for testing and development purposes
 
 ---
@@ -9,7 +9,7 @@ services:
     container_name: zookeeper
     environment:
       ZOO_MAX_CLIENT_CNXNS: 0
-      ZOO_STANDALONE_ENABLED: "true" 
+      ZOO_STANDALONE_ENABLED: "true"
     ports:
       - "2181:2181"
     networks:
@@ -82,27 +82,27 @@ services:
     networks:
       - vpcbr
 
-  database:
-    image: postgres
-    container_name: database
+  postgres:
+    build: ../postgres
+    container_name: postgres
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: "consumer"
-      POSTGRES_PASSWORD: "testing"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
       POSTGRES_DB: "admin"
     networks:
       vpcbr:
         ipv4_address: 10.6.0.153
 
   nifi:
-    image: mkobit/nifi
+    build: ../nifi
     container_name: nifi
     ports:
       - "8080-8081:8080-8081"
     volumes:
-      - "/mnt/data/baikal-devenv/nifi/data:/mnt/data:ro"
-      - "../nifi/hdfs/:/opt/nifi/conf/hdfs:ro"
+      - "/mnt/data/baikal-devenv/nifi/data:/opt/nifi/data"
+      - "../nifi/hdfs/:/opt/nifi/conf/hdfs"
     networks:
       vpcbr:
         ipv4_address: 10.6.0.151
@@ -119,7 +119,7 @@ services:
         ipv4_address: 10.6.0.150
 
   hadoop-namenode:
-    image: segence/hadoop:0.7.0
+    build: ../hadoop
     container_name: hadoop-namenode
     hostname: hadoop-namenode
     ports: # HOST:CONTAINER
@@ -128,6 +128,8 @@ services:
       - "8020:8020"
       - "8088:8088"
       - "9001:9001"
+      - "10000:10000"
+      - "10002:10002"
       - "50070:50070"
       - "50090:50090"
     expose:
@@ -146,7 +148,7 @@ services:
         ipv4_address: 10.6.0.157
 
   hadoop-datanode1:
-    image: segence/hadoop:0.7.0
+    build: ../hadoop
     container_name: hadoop-datanode1
     hostname: hadoop-datanode1
     ports:
