@@ -52,5 +52,5 @@
   <property>
     <name>hive.server2.transport.mode</name>
     <value>binary</value>
-  </property>  
+  </property>
 </configuration>
