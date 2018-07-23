@@ -1,6 +1,6 @@
 #!/bin/bash
 apt-get -y update
-apt-get -y install sudo
+apt-get -y install sudo net-tools
 sudo -u hadoop -H sh -c "/usr/local/hadoop/bin/hdfs namenode -format"
 service hadoop start
 service hadoop stop
@@ -16,4 +16,4 @@ sudo -u hadoop -H sh -c "/usr/local/hadoop/bin/hdfs dfs -mkdir /user/hive; /usr/
 echo "export HADOOP_HOME=${HADOOP_HOME}" > /usr/local/hive/conf/hive-env.sh
 sudo -u hadoop -H sh -c "$HIVE_HOME/bin/schematool -initSchema -dbType postgres"
 sudo -u hadoop -H sh -c cd; zeppelin-daemon.sh start
-sudo -u hadoop -H sh -c "hive --service hiveserver2"
+sudo -u hadoop -H sh -c "$HIVE_HOME/bin/hive --service hiveserver2"
