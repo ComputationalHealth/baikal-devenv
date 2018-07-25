@@ -80,7 +80,7 @@ RUN mv /usr/local/spark-2.2.0-bin-without-hadoop /usr/local/spark
 ENV SPARK_HOME=/usr/local/spark
 ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native/:$LD_LIBRARY_PATH
 RUN pip install pyspark
-ENV PYSPARK_PYTHON=/usr/bin/python
+ENV PYSPARK_PYTHON=/usr/bin/python3
 ENV PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
 ENV PYTHONPATH=$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH
 
