@@ -1,6 +1,6 @@
 baikal-devenv
 =============
-Provides 2-node HDFS, Zeppelin w/ spark 2.2, Nifi, Kafka, Jupyter notebook, postgres db, and python scripts to consume/produce Kafka. Applications and services largely version-locked to resemble HDP v2.6.0.3 for development and testin.
+This repository contains the Docker components necessary to deploy a local data science development environment. The curren configuration includes 2-node HDFS, Zeppelin w/ spark 2.2, Nifi, Kafka, Jupyter notebook, postgres db, and example Python scripts to consume/produce Kafka. Applications and services are largely version-locked to match HDP v2.6.0.3 for development and testing.
 
 Instructions
 ------------
@@ -34,3 +34,10 @@ To connect to Kafka using confluent_kafka python API:
 from confluent_kafka import Producer
 p = Producer({'bootstrap.servers': '10.6.0.155:9092'})
 ```
+
+Related Repositories
+----
+Example applications built on this platform include:
+
+1. [Nucleus - A Platform for Creating Laboratory Business Intelligence Dashboards and Performing Advanced Analytics on Laboratory Data](https://github.com/ComputationalHealth/nucleus)
+2. [Electron - Application to Acquire Real-Time Physiologic Monitoring Data](https://github.com/ComputationalHealth/electron)
