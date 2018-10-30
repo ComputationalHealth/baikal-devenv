@@ -139,7 +139,7 @@ services:
       - HADOOP_NAMENODE_HOST=hadoop-namenode
     volumes:
       - ../hadoop/startup.sh:/root/startup.sh
-#      - ../hadoop/data-master:/data
+      - ../hadoop/load_fakeCDM.sh:/root/load_fakeCDM.sh
       - ../hadoop/slaves-config:/config:ro
       - ../hadoop/deployments:/deployments:ro
     tty: true
