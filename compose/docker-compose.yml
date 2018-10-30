@@ -163,7 +163,6 @@ services:
       - HDFS_REPLICATION_FACTOR=1
       - HADOOP_NAMENODE_HOST=hadoop-namenode
     volumes:
-#      - ../hadoop/data-slave1:/data
       - ../hadoop/slaves-config:/config:ro
     links:
       - hadoop-namenode
