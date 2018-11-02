@@ -309,6 +309,6 @@ FROM '/tmp/vital_large.csv'
 DELIMITER ',' CSV
 HEADER;
 
-CREATE INDEX patid1 ON diagnosis (patid);
+CREATE INDEX patid1 ON pcori_cdmv3.diagnosis (patid);
 
-CREATE INDEX patid2 ON vital (patid);
+CREATE INDEX patid2 ON pcori_cdmv3.vital (patid);
