@@ -13,9 +13,8 @@ wget https://github.com/LHSNet/PCORNet-CDM/raw/master/PCORNet-CDM-v3/fake-data/h
 wget https://github.com/LHSNet/PCORNet-CDM/raw/master/PCORNet-CDM-v3/fake-data/prescribing.csv
 wget https://github.com/LHSNet/PCORNet-CDM/raw/master/PCORNet-CDM-v3/fake-data/vital.csv
 cd ..;mkdir CDM_large;cd CDM_large
-n=100
-(head -n1 ../CDM/diagnosis.csv; for i in $(seq 1 $n); do tail -n+2 ../CDM/diagnosis.csv; done) > diagnosis.csv
-(head -n1 ../CDM/vital.csv; for i in $(seq 1 $n); do tail -n+2 ../CDM/vital.csv; done) > vital.csv
+(head -n1 ../CDM/diagnosis.csv; for i in $(seq 1 $SCALE_PCORNET); do tail -n+2 ../CDM/diagnosis.csv; done) > diagnosis.csv
+(head -n1 ../CDM/vital.csv; for i in $(seq 1 $_SCALE_PCORNET); do tail -n+2 ../CDM/vital.csv; done) > vital.csv
 # change ownership to user "hadoop" and move to /home/hadoop
 cd ..;chown hadoop.hadoop CDM;chown hadoop.hadoop CDM_large
 mv CDM /home/hadoop

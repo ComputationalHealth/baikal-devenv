@@ -11,7 +11,6 @@ RUN wget https://github.com/LHSNet/PCORNet-CDM/raw/master/PCORNet-CDM-v3/fake-da
 RUN wget https://github.com/LHSNet/PCORNet-CDM/raw/master/PCORNet-CDM-v3/fake-data/encounter.csv
 RUN wget https://github.com/LHSNet/PCORNet-CDM/raw/master/PCORNet-CDM-v3/fake-data/prescribing.csv
 RUN wget https://github.com/LHSNet/PCORNet-CDM/raw/master/PCORNet-CDM-v3/fake-data/vital.csv
-ENV n=100
-RUN (head -n1 diagnosis.csv; for i in $(seq 1 $n); do tail -n+2 diagnosis.csv; done) > diagnosis_large.csv
-RUN (head -n1 vital.csv; for i in $(seq 1 $n); do tail -n+2 vital.csv; done) > vital_large.csv
+RUN (head -n1 diagnosis.csv; for i in $(seq 1 $SCALE_PCORNET); do tail -n+2 diagnosis.csv; done) > diagnosis_large.csv
+RUN (head -n1 vital.csv; for i in $(seq 1 $SCALE_PCORNET); do tail -n+2 vital.csv; done) > vital_large.csv
 WORKDIR /
