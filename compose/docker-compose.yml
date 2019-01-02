@@ -126,6 +126,7 @@ services:
     ports: # HOST:CONTAINER
       - "2222:2222"
       - "4040:4040"
+      - "7077:7077"
       - "8020:8020"
       - "8088:8088"
       - "9001:9001"
@@ -140,6 +141,10 @@ services:
     volumes:
       - ../hadoop/startup.sh:/root/startup.sh
       - ../hadoop/load_fakeCDM.sh:/root/load_fakeCDM.sh
+      - ../hadoop/hive_install.sh:/root/hive_install.sh
+      - ../hadoop/hive-site.xml:/root/hive-site.xml
+      - ../hadoop/hive_interpreter.json:/root/hive_interpreter.json
+      - ../hadoop/hiveTest_ntbk.sh:/root/hiveTest_ntbk.tgz
       - ../hadoop/slaves-config:/config:ro
       - ../hadoop/deployments:/deployments:ro
     tty: true
