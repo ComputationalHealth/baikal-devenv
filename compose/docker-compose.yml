@@ -1,4 +1,4 @@
-# docker-compose for Hadoop services versioned to be largely equivalent to HDP v2.6.0.3 
+# docker-compose for Hadoop services versioned to be largely equivalent to HDP v2.6.0.3
 # for testing and development purposes
 
 ---
@@ -9,7 +9,7 @@ services:
     container_name: zookeeper
     environment:
       ZOO_MAX_CLIENT_CNXNS: 0
-      ZOO_STANDALONE_ENABLED: "true" 
+      ZOO_STANDALONE_ENABLED: "true"
     ports:
       - "2181:2181"
     networks:
@@ -17,7 +17,7 @@ services:
         ipv4_address: 10.6.0.156
 
   kafka:
-    image: ches/kafka:0.10.1.0
+    image: wurstmeister/kafka:2.11-2.0.0
     container_name: kafka
     ports:
       - "9092:9092"
@@ -25,7 +25,7 @@ services:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 0
-      ZOOKEEPER_CONNECTION_STRING: 10.6.0.156:2181
+      KAFKA_ZOOKEEPER_CONNECT: 10.6.0.156:2181
       KAFKA_ADVERTISED_HOST_NAME: 10.6.0.155
       KAFKA_PORT: 9092
       KAFKA_ADVERTISED_PORT: 9092
@@ -82,27 +82,28 @@ services:
     networks:
       - vpcbr
 
-  database:
-    image: postgres
-    container_name: database
+  postgres:
+    build: ../postgres
+    container_name: postgres
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: "consumer"
-      POSTGRES_PASSWORD: "testing"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
       POSTGRES_DB: "admin"
+      SCALE_PCORNET: 10
     networks:
       vpcbr:
         ipv4_address: 10.6.0.153
 
   nifi:
-    image: mkobit/nifi
+    build: ../nifi
     container_name: nifi
     ports:
       - "8080-8081:8080-8081"
     volumes:
-      - "/mnt/data/baikal-devenv/nifi/data:/mnt/data:ro"
-      - "../nifi/hdfs/:/opt/nifi/conf/hdfs:ro"
+      - "/mnt/data/baikal-devenv/nifi/data:/opt/nifi/data"
+      - "../nifi/hdfs/:/opt/nifi/conf/hdfs"
     networks:
       vpcbr:
         ipv4_address: 10.6.0.151
@@ -119,7 +120,7 @@ services:
         ipv4_address: 10.6.0.150
 
   hadoop-namenode:
-    image: segence/hadoop:0.7.0
+    build: ../hadoop
     container_name: hadoop-namenode
     hostname: hadoop-namenode
     ports: # HOST:CONTAINER
@@ -135,9 +136,10 @@ services:
     environment:
       - HDFS_REPLICATION_FACTOR=1
       - HADOOP_NAMENODE_HOST=hadoop-namenode
+      - SCALE_PCORNET=10
     volumes:
       - ../hadoop/startup.sh:/root/startup.sh
-#      - ../hadoop/data-master:/data
+      - ../hadoop/load_fakeCDM.sh:/root/load_fakeCDM.sh
       - ../hadoop/slaves-config:/config:ro
       - ../hadoop/deployments:/deployments:ro
     tty: true
@@ -146,7 +148,7 @@ services:
         ipv4_address: 10.6.0.157
 
   hadoop-datanode1:
-    image: segence/hadoop:0.7.0
+    build: ../hadoop
     container_name: hadoop-datanode1
     hostname: hadoop-datanode1
     ports:
@@ -161,7 +163,6 @@ services:
       - HDFS_REPLICATION_FACTOR=1
       - HADOOP_NAMENODE_HOST=hadoop-namenode
     volumes:
-#      - ../hadoop/data-slave1:/data
       - ../hadoop/slaves-config:/config:ro
     links:
       - hadoop-namenode
