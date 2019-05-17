@@ -1,0 +1,81 @@
+    "2DW3SCBRV": {
+      "id": "2DW3SCBRV",
+      "name": "hive",
+      "group": "jdbc",
+      "properties": {
+        "default.password": "",
+        "zeppelin.jdbc.auth.type": "",
+        "common.max_count": "1000",
+        "zeppelin.jdbc.principal": "",
+        "default.user": "gpadmin",
+        "default.url": "jdbc:hive2://hadoop-namenode:10000/",
+        "default.driver": "org.apache.hive.jdbc.HiveDriver",
+        "zeppelin.jdbc.keytab.location": "",
+        "zeppelin.jdbc.concurrent.use": "true",
+        "zeppelin.jdbc.concurrent.max_connection": "10"
+      },
+      "status": "READY",
+      "interpreterGroup": [
+        {
+          "name": "sql",
+          "class": "org.apache.zeppelin.jdbc.JDBCInterpreter",
+          "defaultInterpreter": false,
+          "editor": {
+            "language": "sql",
+            "editOnDblClick": false
+          }
+        }
+      ],
+      "dependencies": [
+        {
+          "groupArtifactVersion": "org.apache.hive:hive-jdbc:1.2.2",
+          "local": false
+        },
+        {
+          "groupArtifactVersion": "org.apache.hadoop:hadoop-common:2.9.0",
+          "local": false,
+          "exclusions": []
+        }
+      ],
+      "option": {
+        "remote": true,
+        "port": -1,
+        "perNote": "shared",
+        "perUser": "shared",
+        "isExistingProcess": false,
+        "setPermission": false,
+        "users": [],
+        "isUserImpersonate": false
+      }
+    },
+    "2DX6QJA2V": {
+      "id": "2DX6QJA2V",
+      "name": "md",
+      "group": "md",
+      "properties": {
+        "markdown.parser.type": "pegdown"
+      },
+      "status": "READY",
+      "interpreterGroup": [
+        {
+          "name": "md",
+          "class": "org.apache.zeppelin.markdown.Markdown",
+          "defaultInterpreter": false,
+          "editor": {
+            "language": "markdown",
+            "editOnDblClick": true
+          }
+        }
+      ],
+      "dependencies": [],
+      "option": {
+        "remote": true,
+        "port": -1,
+        "perNote": "shared",
+        "perUser": "shared",
+        "isExistingProcess": false,
+        "setPermission": false,
+        "users": [],
+        "isUserImpersonate": false
+      }
+    },

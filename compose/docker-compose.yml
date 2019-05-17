@@ -17,7 +17,7 @@ services:
         ipv4_address: 10.6.0.156
 
   kafka:
-    image: ches/kafka:0.10.1.0
+    image: wurstmeister/kafka:2.11-2.0.0
     container_name: kafka
     ports:
       - "9092:9092"
@@ -25,7 +25,7 @@ services:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 0
-      ZOOKEEPER_CONNECTION_STRING: 10.6.0.156:2181
+      KAFKA_ZOOKEEPER_CONNECT: 10.6.0.156:2181
       KAFKA_ADVERTISED_HOST_NAME: 10.6.0.155
       KAFKA_PORT: 9092
       KAFKA_ADVERTISED_PORT: 9092
@@ -91,6 +91,7 @@ services:
       POSTGRES_USER: "admin"
       POSTGRES_PASSWORD: "admin"
       POSTGRES_DB: "admin"
+      SCALE_PCORNET: 10
     networks:
       vpcbr:
         ipv4_address: 10.6.0.153
@@ -125,11 +126,10 @@ services:
     ports: # HOST:CONTAINER
       - "2222:2222"
       - "4040:4040"
+      - "7077:7077"
       - "8020:8020"
       - "8088:8088"
       - "9001:9001"
-      - "10000:10000"
-      - "10002:10002"
       - "50070:50070"
       - "50090:50090"
     expose:
@@ -137,9 +137,14 @@ services:
     environment:
       - HDFS_REPLICATION_FACTOR=1
       - HADOOP_NAMENODE_HOST=hadoop-namenode
+      - SCALE_PCORNET=10
     volumes:
       - ../hadoop/startup.sh:/root/startup.sh
-#      - ../hadoop/data-master:/data
+      - ../hadoop/load_fakeCDM.sh:/root/load_fakeCDM.sh
+      - ../hadoop/hive_install.sh:/root/hive_install.sh
+      - ../hadoop/hive-site.xml:/root/hive-site.xml
+      - ../hadoop/hive_interpreter.json:/root/hive_interpreter.json
+      - ../hadoop/hiveTest_ntbk.sh:/root/hiveTest_ntbk.tgz
       - ../hadoop/slaves-config:/config:ro
       - ../hadoop/deployments:/deployments:ro
     tty: true
@@ -163,7 +168,6 @@ services:
       - HDFS_REPLICATION_FACTOR=1
       - HADOOP_NAMENODE_HOST=hadoop-namenode
     volumes:
-#      - ../hadoop/data-slave1:/data
       - ../hadoop/slaves-config:/config:ro
     links:
       - hadoop-namenode
