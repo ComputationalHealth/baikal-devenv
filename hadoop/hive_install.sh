@@ -71,7 +71,6 @@ echo -e "spark.sql.warehouse.dir\t\t/user/hive/warehouse" >> spark-defaults.conf
 # Create hdfs directories needed for hive (assuming /user already exists)
 sudo -u hadoop -i /bin/bash -c 'hadoop fs -mkdir /user/hive'
 sudo -u hadoop -i /bin/bash -c 'hadoop fs -mkdir /user/hive/warehouse'
-sudo -u hadoop -i /bin/bash -c 'hadoop fs -mkdir /tmp'
 sudo -u hadoop -i /bin/bash -c 'hadoop fs -chmod g+w /tmp'
 sudo -u hadoop -i /bin/bash -c 'hadoop fs -chmod g+w /user/hive/warehouse'
 
@@ -90,12 +89,6 @@ cat /root/hive_interpreter.json >> /tmp/interpreter.json
 tail -n +3 /usr/local/zeppelin/conf/interpreter.json >> /tmp/interpreter.json
 mv /tmp/interpreter.json /usr/local/zeppelin/conf
 chown hadoop.hadoop /usr/local/zeppelin/conf/interpreter.json
-
-# Copy in sample notebook, Hive_Test0
-cd /root
-tar -zxf hiveTest_ntbk.tgz
-chown -R hadoop.hadoop 2DXQJUQPK
-mv 2DXQJUQPK /usr/local/zeppelin/notebook
 
 # Restart zeppelin service (we'll leave as a "restart" for now)
 sudo -u hadoop -i /bin/bash -c 'unset CLASSPATH;zeppelin-daemon.sh restart'

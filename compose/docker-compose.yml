@@ -144,7 +144,6 @@ services:
       - ../hadoop/hive_install.sh:/root/hive_install.sh
       - ../hadoop/hive-site.xml:/root/hive-site.xml
       - ../hadoop/hive_interpreter.json:/root/hive_interpreter.json
-      - ../hadoop/hiveTest_ntbk.sh:/root/hiveTest_ntbk.tgz
       - "/mnt/data/baikal-devenv/hadoop/code:/root/code"
       - ../hadoop/slaves-config:/config:ro
       - ../hadoop/deployments:/deployments:ro
