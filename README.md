@@ -13,6 +13,7 @@ Instructions
 2. cd baikal-devenv/compose
 3. docker-compose up -d --build
 4. docker exec hadoop-namenode /bin/bash startup.sh
+5. docker exec hadoop-namenode /bin/bash hive_install.sh
 
 ### Shutdown:
 1. docker-compose down -v
