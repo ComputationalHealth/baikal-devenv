@@ -42,7 +42,7 @@ RUN ssh-keygen -t rsa -f /home/hadoop/.ssh/id_rsa -P '' && \
     cat /home/hadoop/.ssh/id_rsa.pub >> /home/hadoop/.ssh/authorized_keys
 
 # Install Hadoop
-ENV HADOOP_VERSION 2.9.1
+ENV HADOOP_VERSION 2.9.2
 RUN wget -q https://www.apache.org/dist/hadoop/common/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz
 RUN tar -xzf hadoop-$HADOOP_VERSION.tar.gz -C /usr/local/
 RUN mv /usr/local/hadoop-$HADOOP_VERSION /usr/local/hadoop
