@@ -1,6 +1,6 @@
 baikal-devenv
 =============
-This repository contains the Docker components necessary to deploy a local data science development environment. The curren configuration includes 2-node HDFS, Zeppelin w/ spark 2.2, Nifi, Kafka, Jupyter notebook, postgres db, and example Python scripts to consume/produce Kafka. Applications and services are largely version-locked to match HDP v2.6.0.3 for development and testing.
+This repository contains the Docker components necessary to deploy a local data science development environment. The current configuration includes 2-node HDFS, Zeppelin w/ spark 2.2, Nifi, Kafka, Jupyter notebook, postgres db, and example Python scripts to consume/produce Kafka. Applications and services are largely version-locked to match HDP v2.6.0.3 for development and testing.
 
 * Jacob McPadden, Thomas JS Durant, Dustin R Bunch, Andreas Coppi, Nathan Price, Kris Rodgerson, Charles J Torre Jr, William Byron, H Patrick Young, Allen L Hsiao, Harlan M Krumholz, Wade L Schulz. “A Scalable Data Science Platform for Healthcare and Precision Medicine Research”, 2018; [arXiv:1808.04849](http://arxiv.org/abs/1808.04849).
 
